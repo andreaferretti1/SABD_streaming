@@ -1,0 +1,13 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+
+202501_T_ONTIME_REPORTING.csv
+202502_T_ONTIME_REPORTING.csv
+202503_T_ONTIME_REPORTING.csv
+202504_T_ONTIME_REPORTING.csv

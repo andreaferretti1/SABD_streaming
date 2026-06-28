@@ -1,0 +1,73 @@
+services:
+  stream_engine:
+    build:
+      context: ../
+      dockerfile: docker/stream_engine/Dockerfile
+    networks:
+      - sabd_network
+
+
+  kafka:
+    image: apache/kafka:latest
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+      CLUSTER_ID: "Mk3OEYBSD34fcwNTJENDM2Qk"
+    volumes:
+      - kafka_volume:/var/lib/kafka/data
+    networks:
+      - sabd_network
+
+  flink-job_manager:
+    build:
+      context: ../
+      dockerfile: docker/Flink/Dockerfile
+    container_name: job_manager
+    depends_on:
+      - kafka
+    ports:
+      - "8081:8081"
+    command: standalone-job --job-classname it.sabd.Main
+    networks:
+      - sabd_network
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: flink-job_manager
+        parallelism.default: 2   
+
+
+
+  flink-task_manager:
+    image: flink:1.20.4-java17
+    container_name: task_manager
+    depends_on:
+      - flink-job_manager
+    command: taskmanager
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: flink-job_manager
+        taskmanager.numberOfTaskSlots: 2
+        parallelism.default: 2    
+    networks:
+      - sabd_network
+
+volumes:
+  kafka_volume:
+
+networks:
+  sabd_network:
+    driver: bridge
