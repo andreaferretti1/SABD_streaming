@@ -1,4 +1,4 @@
-FROM python:3.12-slim
+FROM python:3.142-slim
 
 WORKDIR /app
 
@@ -6,7 +6,6 @@ COPY docker/stream_engine/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 
-COPY src/stream_engine .
-COPY Dataset ./Dataset
+COPY src/csv_consumer .
 
-ENTRYPOINT ["python", "stream_engine.py"]
+ENTRYPOINT ["python", "consumer.py"]

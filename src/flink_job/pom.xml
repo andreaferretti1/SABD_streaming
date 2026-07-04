@@ -30,6 +30,13 @@
             <version>${kafka.version}-${flink.version.short}</version>
         </dependency>
 
+        <!--Aggiunto per avere DeliveryGuarantee sul sink di Kafka-->
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-connector-base</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-clients</artifactId>
