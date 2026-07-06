@@ -8,7 +8,7 @@ from init_influxdb import init_influxdb
 def main():
 
     # Creo le api per scrivere sul data store
-    write_api = init_influxdb()
+    influx_client, write_api = init_influxdb()
 
     # Tabella per invocare la funzione di processamento corretta
     routing_table = {
@@ -24,6 +24,9 @@ def main():
     # Avvio polling
     consumer_gen.consuming_loop()
 
+    # Rilascio risorse
+    write_api.close()
+    influx_client.close()
 
 if __name__ == "__main__":
     main()

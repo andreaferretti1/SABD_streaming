@@ -13,8 +13,13 @@ def init_influxdb():
     influx_client = InfluxDBClient(url=url, token=token, org=org)
 
     # Creo i bucket
+    buckets_to_create = ["q1_results", "q2_results"]
     buckets_api = influx_client.buckets_api()
-    buckets_api.create_bucket(bucket_name="q1_results", org=org)
-    buckets_api.create_bucket(bucket_name="q2_results", org=org)
 
-    return influx_client.write_api()
+    for bucket in buckets_to_create:
+        existing_bucket = buckets_api.find_bucket_by_name(bucket)
+
+        if existing_bucket is None:
+            buckets_api.create_bucket(bucket_name=bucket, org=org)
+
+    return influx_client, influx_client.write_api()

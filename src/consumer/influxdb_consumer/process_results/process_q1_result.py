@@ -25,7 +25,7 @@ def process_q1_result(msg, write_api, bucket):
             point.field("late_departure_rate", float(payload['late_departure_rate']))
 
         # Aggiungo il timestamp, costituito dal timestamp di chiusura della finestra
-        point.time(payload['window_end'], write_precision="ms")
+        point.time(payload['window_start'], write_precision="ms")
 
         # Scrivo nel data store
         write_api.write(bucket=bucket, record=point)
