@@ -5,6 +5,7 @@ import it.sabd.queries.query1.Query1;
 import it.sabd.queries.query2.Query2;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.connector.kafka.source.KafkaSource;
+import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
@@ -16,6 +17,7 @@ public class Main {
         KafkaSource<FlightEvent> kafkaSource = KafkaSource.<FlightEvent>builder()
                 .setBootstrapServers("kafka:9092")
                 .setTopics("data")
+                .setStartingOffsets(OffsetsInitializer.earliest())
                 .setDeserializer(new JSONDeserializationSchema())
                 .build();
 
