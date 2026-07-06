@@ -27,7 +27,7 @@ public class Q2Result {
         result.notCancDivFlights = acc.notCancDivFlights;
         result.totSignificantDelayedFLights = acc.totSignificantDelay;
 
-        if(acc.notCancDivDelayedFlights != 0) {
+        if(acc.totDepDelay != null && acc.notCancDivDelayedFlights != 0) {
             result.depDelayMean = acc.totDepDelay / acc.notCancDivDelayedFlights;
         } else {
             result.depDelayMean = null;

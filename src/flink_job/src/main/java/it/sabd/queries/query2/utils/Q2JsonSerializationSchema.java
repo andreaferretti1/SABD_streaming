@@ -76,7 +76,7 @@ public class Q2JsonSerializationSchema implements KafkaRecordSerializationSchema
             Map<String, Object> flightRecord = new HashMap<>();
             flightRecord.put("carrier", flight.f0);
             flightRecord.put("dest_airport", flight.f1);
-            flightRecord.put("depDelay", flight.f2);
+            flightRecord.put("dep_delay", flight.f2);
 
             delayedFlightsRecord.add(flightRecord);
         }

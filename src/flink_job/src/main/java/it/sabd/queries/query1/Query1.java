@@ -30,7 +30,8 @@ public class Query1 {
                 .keyBy(event -> event.OP_UNIQUE_CARRIER)
                 .window(TumblingEventTimeWindows.of(Duration.ofHours(1)))
                 .aggregate(new Q1AggregateData(), new Q1ProcessData())
-                .sinkTo(kafkaSink);
+                .sinkTo(kafkaSink)
+                .setParallelism(1);
 
     }
 

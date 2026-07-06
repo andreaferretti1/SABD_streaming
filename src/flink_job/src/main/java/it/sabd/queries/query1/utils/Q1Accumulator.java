@@ -8,7 +8,7 @@ public class Q1Accumulator{
     public int completed = 0;
     public int cancelled = 0;
     public int diverted = 0;
-    public double totalDepDelay = 0;
+    public Double totalDepDelay = null;
     public int validDelayFlights = 0;
     public int lateFlightsGreater15 = 0;
 
@@ -34,8 +34,12 @@ public class Q1Accumulator{
         if(!isCancelled && event.DEP_DELAY != null){
 
             this.validDelayFlights++;
-            this.totalDepDelay += event.DEP_DELAY;
 
+            if(this.totalDepDelay == null){
+                this.totalDepDelay = event.DEP_DELAY;
+            } else {
+                this.totalDepDelay += event.DEP_DELAY;
+            }
             if(event.DEP_DELAY > 15) this.lateFlightsGreater15++;
 
         }
@@ -48,7 +52,15 @@ public class Q1Accumulator{
         this.completed = this.completed + acc.completed;
         this.cancelled = this.cancelled + acc.cancelled;
         this.diverted = this.diverted + acc.diverted;
-        this.totalDepDelay = this.totalDepDelay + acc.totalDepDelay;
+
+        if(acc.totalDepDelay != null){
+            if(this.totalDepDelay == null){
+              this.totalDepDelay = acc.totalDepDelay;
+            } else{
+                this.totalDepDelay = this.totalDepDelay + acc.totalDepDelay;
+            }
+        }
+
         this.validDelayFlights = this.validDelayFlights + acc.validDelayFlights;
         this.lateFlightsGreater15 = this.lateFlightsGreater15 + acc.lateFlightsGreater15;
 

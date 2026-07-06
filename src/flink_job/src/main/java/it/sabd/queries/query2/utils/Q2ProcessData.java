@@ -11,7 +11,7 @@ public class Q2ProcessData extends ProcessWindowFunction<Q2Result, Q2Output, Int
     public void process(Integer originAirport,
                         ProcessWindowFunction<Q2Result, Q2Output, Integer, TimeWindow>.Context context,
                         Iterable<Q2Result> results,
-                        Collector<Q2Output> collector) throws Exception {
+                        Collector<Q2Output> collector){
 
 
             Q2Result result = results.iterator().next();

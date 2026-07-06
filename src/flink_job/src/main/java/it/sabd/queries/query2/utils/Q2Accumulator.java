@@ -10,7 +10,7 @@ public class Q2Accumulator {
 
     public int notCancDivFlights = 0;
     public int totSignificantDelay = 0;
-    public double totDepDelay = 0;
+    public Double totDepDelay = null;
     public int notCancDivDelayedFlights = 0;
     public Double maxDepDelay = null;
     public PriorityQueue<Tuple3<String, Integer, Double>> significantDelayedFlights = new PriorityQueue<Tuple3<String, Integer, Double>>(20, Comparator.comparingDouble(flight -> flight.f2));
@@ -29,8 +29,11 @@ public class Q2Accumulator {
 
             this.notCancDivDelayedFlights++;
 
-            this.totDepDelay += depDelay;
-
+            if(this.totDepDelay == null){
+                this.totDepDelay = depDelay;
+            } else {
+                this.totDepDelay += depDelay;
+            }
             if (this.maxDepDelay == null) {
                 this.maxDepDelay = depDelay;
             } else {
@@ -52,7 +55,16 @@ public class Q2Accumulator {
 
         this.notCancDivFlights = this.notCancDivFlights + acc.notCancDivFlights;
         this.totSignificantDelay = this.totSignificantDelay + acc.totSignificantDelay;
-        this.totDepDelay = this.totDepDelay + acc.totDepDelay;
+
+        if(acc.totDepDelay != null) {
+
+            if(this.totDepDelay == null){
+                this.totDepDelay = acc.totDepDelay;
+            } else {
+                this.totDepDelay = this.totDepDelay + acc.totDepDelay;
+            }
+        }
+
         this.notCancDivDelayedFlights = this.notCancDivDelayedFlights + acc.notCancDivDelayedFlights;
         if(acc.maxDepDelay != null){
             if(this.maxDepDelay == null){

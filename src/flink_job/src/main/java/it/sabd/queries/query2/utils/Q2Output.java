@@ -23,7 +23,7 @@ public class Q2Output {
                     int totalFlights,
                     int totSignificantDelayedFLights,
                     Double depDelayMean,
-                    double maxDepDelay,
+                    Double maxDepDelay,
                     List<Tuple3<String, Integer, Double>> top20significantDelayedFLights) {
         this.startWindow = startWindow;
         this.originAirport = originAirport;

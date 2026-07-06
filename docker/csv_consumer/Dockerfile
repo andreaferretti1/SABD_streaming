@@ -1,11 +1,14 @@
-FROM python:3.142-slim
+FROM python:3.12-slim
 
 WORKDIR /app
 
-COPY docker/stream_engine/requirements.txt .
+COPY docker/csv_consumer/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 
-COPY src/csv_consumer .
+COPY src/consumer/shared ./consumer/shared
+COPY src/consumer/csv_consumer ./consumer/csv_consumer
 
-ENTRYPOINT ["python", "consumer.py"]
+ENV PYTHONPATH=/app
+
+ENTRYPOINT ["python", "consumer/csv_consumer/main.py"]

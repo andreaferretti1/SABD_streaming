@@ -33,7 +33,7 @@ public class Q1Result {
         result.cancelled = acc.cancelled;
         result.diverted = acc.diverted;
 
-        if(acc.validDelayFlights != 0) {
+        if(acc.totalDepDelay != null && acc.validDelayFlights != 0) {
             result.depDelayMean = acc.totalDepDelay / acc.validDelayFlights;
         } else {
             result.depDelayMean = null;

@@ -4,7 +4,8 @@ from confluent_kafka import Producer
 def get_producer():
     config = {
         'bootstrap.servers': 'kafka:9092',
-        'acks': 1
+        'acks': 'all',
+        'enable.idempotence': True
         # retries lasciato a 2147483647
         # linger.ms lasciato a 5ms
         # queued.max.messages.kbytes lasciato a 64MB

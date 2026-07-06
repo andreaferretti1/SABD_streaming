@@ -3,6 +3,12 @@ services:
     build:
       context: ../
       dockerfile: docker/stream_engine/Dockerfile
+    container_name: stream_engine
+    environment:
+      - STREAM_DURATION=1
+    depends_on:
+      - kafka
+      - flink-job_manager
     networks:
       - sabd_network
 
@@ -16,7 +22,7 @@ services:
       KAFKA_NODE_ID: 1
       KAFKA_PROCESS_ROLES: broker,controller
       KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
@@ -34,32 +40,34 @@ services:
     build:
       context: ../
       dockerfile: docker/Flink/Dockerfile
-    container_name: job_manager
+    container_name: jobmanager
     depends_on:
       - kafka
     ports:
       - "8081:8081"
-    command: standalone-job --job-classname it.sabd.Main
+    command: jobmanager
     networks:
       - sabd_network
     environment:
       - |
         FLINK_PROPERTIES=
-        jobmanager.rpc.address: flink-job_manager
+        jobmanager.rpc.address: jobmanager
         parallelism.default: 2   
 
 
 
   flink-task_manager:
-    image: flink:1.20.4-java17
-    container_name: task_manager
+    build:
+      context: ../
+      dockerfile: docker/Flink/Dockerfile
+    container_name: taskmanager
     depends_on:
       - flink-job_manager
     command: taskmanager
     environment:
       - |
         FLINK_PROPERTIES=
-        jobmanager.rpc.address: flink-job_manager
+        jobmanager.rpc.address: jobmanager
         taskmanager.numberOfTaskSlots: 2
         parallelism.default: 2    
     networks:
@@ -70,27 +78,42 @@ services:
     build:
       context: ../
       dockerfile: docker/csv_consumer/Dockerfile
+    container_name: csv_consumer
+    depends_on:
+      - kafka
+      - flink-job_manager
     volumes:
       - ../Results:/app/Results
+    networks:
+      - sabd_network
+
+  influxdb_consumer:
+    build:
+      context: ../
+      dockerfile: docker/influxdb_consumer/Dockerfile
+    container_name: influxdb_consumer
+    depends_on:
+      - kafka
+      - flink-job_manager
+    environment:
+      DOCKER_INFLUXDB_INIT_ORG: results
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: ${INFLUX_TOKEN}
     networks:
       - sabd_network
 
 
   influxdb:
     image: influxdb:2.7
+    container_name: influxdb
     ports:
       - "8086:8086"
     environment:
         DOCKER_INFLUXDB_INIT_MODE: setup
-        DOCKER_INFLUXDB_INIT_USERNAME: /run/secrets/influxdb2-admin-username
-        DOCKER_INFLUXDB_INIT_PASSWORD: /run/secrets/influxdb2-admin-password
-        DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: /run/secrets/influxdb2-admin-token
-        DOCKER_INFLUXDB_INIT_ORG: docs
+        DOCKER_INFLUXDB_INIT_USERNAME: ${INFLUX_USER}
+        DOCKER_INFLUXDB_INIT_PASSWORD: ${INFLUX_PASS}
+        DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: ${INFLUX_TOKEN}
+        DOCKER_INFLUXDB_INIT_ORG: results
         DOCKER_INFLUXDB_INIT_BUCKET: home
-    secrets:
-        - influxdb2-admin-username
-        - influxdb2-admin-password
-        - influxdb2-admin-token
     volumes:
         - type: volume
           source: influxdb2-data
@@ -98,6 +121,8 @@ services:
         - type: volume
           source: influxdb2-config
           target: /etc/influxdb2
+    networks:
+      - sabd_network
 
 
   grafana:
@@ -107,19 +132,14 @@ services:
       - influxdb
     ports:
       - "3000:3000"
+    environment:
+       - INFLUX_TOKEN=${INFLUX_TOKEN}
     volumes:
       - grafana_storage:/var/lib/grafana
+      - ./Grafana/config/datasources:/etc/grafana/provisioning/datasources
+      - ./Grafana/config/dashboards:/etc/grafana/provisioning/dashboards
     networks:
       - sabd_network
-
-
-secrets:
-  influxdb2-admin-username:
-    file: ~/.env.influxdb2-admin-username
-  influxdb2-admin-password:
-    file: ~/.env.influxdb2-admin-password
-  influxdb2-admin-token:
-    file: ~/.env.influxdb2-admin-token
 
 
 volumes:

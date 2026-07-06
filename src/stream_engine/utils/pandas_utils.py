@@ -23,6 +23,8 @@ def compute_event_time(data):
     hours = dep_time // 100
     minutes = dep_time % 100
 
+    hours[hours == 24] = 0
+
     date = pd.to_datetime({
         'year': data['YEAR'],
         'month': data['MONTH'],
