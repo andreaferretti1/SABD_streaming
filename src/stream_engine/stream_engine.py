@@ -29,6 +29,7 @@ def generate_stream():
 
     # Calcolo il fattore di accelerazione
     target_duration = os.getenv('STREAM_DURATION')
+    target_duration = float(target_duration)
     speedup_factor = compute_speedup_factor(target_duration, dataset['event_time'])
 
     # Istanzio il producer kafka

@@ -17,7 +17,7 @@ public class Query1 {
     public static void executeQuery(DataStream<FlightEvent> dataStream){
 
         KafkaSink<Q1ResultWithTime> kafkaSink = KafkaSink.<Q1ResultWithTime>builder()
-                        .setBootstrapServers("localhost:9092")
+                        .setBootstrapServers("kafka:9092")
                         .setRecordSerializer(new Q1JsonSerializationSchema("q1_results"))
                         .setDeliveryGuarantee(DeliveryGuarantee.AT_LEAST_ONCE)
                         .build();

@@ -26,7 +26,7 @@ public class Query2 {
 
         //Calcolo statistiche finestra di 1 ora
         KafkaSink<List<Q2Output>> kafkaSink1H = KafkaSink.<List<Q2Output>>builder()
-                .setBootstrapServers("localhost:9092")
+                .setBootstrapServers("kafka:9092")
                 .setRecordSerializer(new Q2JsonSerializationSchema("q2_results_1h"))
                 .setDeliveryGuarantee(DeliveryGuarantee.AT_LEAST_ONCE)
                 .build();
@@ -43,7 +43,7 @@ public class Query2 {
 
         //Calcolo statistiche finestra di 6 ore
         KafkaSink<List<Q2Output>> kafkaSink6H = KafkaSink.<List<Q2Output>>builder()
-                .setBootstrapServers("localhost:9092")
+                .setBootstrapServers("kafka:9092")
                 .setRecordSerializer(new Q2JsonSerializationSchema("q2_results_6h"))
                 .setDeliveryGuarantee(DeliveryGuarantee.AT_LEAST_ONCE)
                 .build();
@@ -59,7 +59,7 @@ public class Query2 {
 
         //Calcolo statistiche finestra globale
         KafkaSink<List<Q2Output>> kafkaSinkGlobal = KafkaSink.<List<Q2Output>>builder()
-                .setBootstrapServers("localhost:9092")
+                .setBootstrapServers("kafka:9092")
                 .setRecordSerializer(new Q2JsonSerializationSchema("q2_results_global"))
                 .setDeliveryGuarantee(DeliveryGuarantee.AT_LEAST_ONCE)
                 .build();
