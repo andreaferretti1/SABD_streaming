@@ -51,7 +51,7 @@ services:
         FLINK_PROPERTIES=
         jobmanager.rpc.address: jobmanager
         parallelism.default: 4
-        metrics.reporter.influxdb.class: org.apache.flink.metrics.influxdb.InfluxdbReporter
+        metrics.reporter.influxdb.factory.class: org.apache.flink.metrics.influxdb.InfluxdbReporterFactory
         metrics.reporter.influxdb.host: influxdb
         metrics.reporter.influxdb.port: 8086
         metrics.reporter.influxdb.db: flink_metrics
@@ -75,7 +75,7 @@ services:
         FLINK_PROPERTIES=
         jobmanager.rpc.address: jobmanager
         taskmanager.numberOfTaskSlots: 4
-        metrics.reporter.influxdb.class: org.apache.flink.metrics.influxdb.InfluxdbReporter
+        metrics.reporter.influxdb.factory.class: org.apache.flink.metrics.influxdb.InfluxdbReporterFactory
         metrics.reporter.influxdb.host: influxdb
         metrics.reporter.influxdb.port: 8086
         metrics.reporter.influxdb.db: flink_metrics

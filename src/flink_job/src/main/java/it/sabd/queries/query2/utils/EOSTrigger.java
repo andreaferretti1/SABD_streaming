@@ -10,7 +10,7 @@ public class EOSTrigger extends Trigger<Object, Window> {
 	
     @Override
     public TriggerResult onElement(Object event, long l, Window window, TriggerContext triggerContext) {
-        triggerContext.registerEventTimeTimer(EOS_TIMESTAMP);
+        triggerContext.registerEventTimeTimer(EOS_TIMESTAMP - 1);
         return TriggerResult.CONTINUE;
     }
 
@@ -21,7 +21,7 @@ public class EOSTrigger extends Trigger<Object, Window> {
 
     @Override
     public TriggerResult onEventTime(long time, Window window, TriggerContext triggerContext) {
-        if (time == EOS_TIMESTAMP) {
+        if (time == EOS_TIMESTAMP - 1) {
             return TriggerResult.FIRE_AND_PURGE;
         }
         return TriggerResult.CONTINUE;
@@ -29,7 +29,7 @@ public class EOSTrigger extends Trigger<Object, Window> {
 
     @Override
     public void clear(Window window, TriggerContext triggerContext) {
-        triggerContext.deleteEventTimeTimer(EOS_TIMESTAMP);
+        triggerContext.deleteEventTimeTimer(EOS_TIMESTAMP - 1);
     }
 
 }
