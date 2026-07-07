@@ -2,9 +2,9 @@ import json
 from influxdb_client import Point
 
 WINDOW_SIZES = {
-    "q2_results_1h": "1",
-    "q2_results_6h": "6",
-    "q2_results_global": "global"}
+    "q2-results-1h": "1",
+    "q2-results-6h": "6",
+    "q2-results-global": "global"}
 
 def process_q2_result(msg, write_api, bucket):
 

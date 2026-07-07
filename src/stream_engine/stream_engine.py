@@ -37,42 +37,50 @@ def generate_stream():
     topic = "data"
 
     # Calcolo gli intertempi reali di trasmissione degli eventi
-    event_times = dataset['event_time'].to_numpy()
+    event_times = dataset['event_time'].tolist()
     deltas = dataset['event_time'].diff()
     deltas.iloc[0] = 0
-    deltas = deltas.to_numpy()
+    deltas = deltas.tolist()
 
     # Elimino la colonna event_time per inviare i dati grezzi
     dataset.drop(columns = ['event_time'], inplace = True)
     dict_dataset = dataset.to_dict(orient='records')
+    
+    print(f"Tipo dato: {type(event_times[0])}")
 
     # Genero lo stream di eventi
     for i, record in enumerate(dict_dataset):
 
         if not RUNNING:
             break
+        
+        ts_seconds = event_times[i]
+        ts = int(ts_seconds) * 1000
 
         if deltas[i] != 0:
             time.sleep(deltas[i] / speedup_factor)
+        
 
         payload = json.dumps(record, ignore_nan = True)
-        send_message(producer=producer, topic=topic, payload=payload, timestamp=int(event_times[i] * 1000))
+        send_message(producer=producer, topic=topic, payload=payload, timestamp=ts)
 
         if i % 5000 == 0:
             producer.poll(0)
 
     if RUNNING:
-        # Prendo il valore massimo del tipo long di java
-        java_long_max_value = 9223372036854775807
+        # Prendo lo Unix epoch time corrispondente al 1 giugno 2025
+        end_timestamp = 1748736000000
 
         # Creo il messaggio dummy di fine stream
         end_of_stream_msg = json.dumps({"eos": "eos"})
+        
+        for partition in range(4):
+            
+            # Invio il messaggio
+            send_message_with_partition(producer=producer, topic=topic, payload=end_of_stream_msg, timestamp=end_timestamp, partition = partition)
 
-        # Invio il messaggio
-        send_message(producer=producer, topic=topic, payload=end_of_stream_msg, timestamp=java_long_max_value)
-
-        # Flusho tutto su Kafka
-        producer.flush()
+            # Flusho tutto su Kafka
+            producer.flush()
 
     # Rilascio le risorse
     producer.close()

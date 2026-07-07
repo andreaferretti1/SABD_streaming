@@ -5,7 +5,7 @@ services:
       dockerfile: docker/stream_engine/Dockerfile
     container_name: stream_engine
     environment:
-      - STREAM_DURATION=1
+      - STREAM_DURATION=5
     depends_on:
       - kafka
       - flink-job_manager
@@ -68,8 +68,8 @@ services:
       - |
         FLINK_PROPERTIES=
         jobmanager.rpc.address: jobmanager
-        taskmanager.numberOfTaskSlots: 2
-        parallelism.default: 2    
+        taskmanager.numberOfTaskSlots: 4
+        parallelism.default: 4
     networks:
       - sabd_network
 

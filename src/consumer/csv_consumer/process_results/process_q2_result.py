@@ -2,7 +2,7 @@ import json
 import os
 from datetime import datetime, timezone
 
-CSV_PATHS = {"q2_results_1h":"Results/query2_1h.csv", "q2_results_6h":"Results/query2_6h.csv", "q2_results_global": "Results/query2_global.csv"}
+CSV_PATHS = {"q2-results-1h":"Results/query2_1h.csv", "q2-results-6h":"Results/query2_6h.csv", "q2-results-global": "Results/query2_global.csv"}
 
 # Scrive l'header nei file
 def setup_q2():
