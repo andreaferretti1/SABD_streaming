@@ -1,0 +1,1861 @@
+{
+  "apiVersion": "dashboard.grafana.app/v2",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "adrddr5",
+    "namespace": "default",
+    "uid": "da17742c-874d-44a5-8176-e78b3d6378af",
+    "resourceVersion": "1783380839883980",
+    "generation": 1,
+    "creationTimestamp": "2026-07-06T23:33:59Z",
+    "labels": {
+      "grafana.app/deprecatedInternalID": "2619872110133248"
+    },
+    "annotations": {
+      "grafana.app/createdBy": "access-policy:service",
+      "grafana.app/managedBy": "classic-file-provisioning",
+      "grafana.app/managerId": "Default",
+      "grafana.app/sourceChecksum": "44da9b537a634e3064d048b857ff09c4",
+      "grafana.app/sourcePath": "/etc/grafana/provisioning/dashboards/Query results-1783339050593.json",
+      "grafana.app/sourceTimestamp": "1783379945000",
+      "grafana.app/folder": ""
+    }
+  },
+  "spec": {
+    "annotations": [
+      {
+        "kind": "AnnotationQuery",
+        "spec": {
+          "builtIn": true,
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "query": {
+            "group": "grafana",
+            "kind": "DataQuery",
+            "spec": {},
+            "version": "v0"
+          }
+        }
+      }
+    ],
+    "cursorSync": "Off",
+    "editable": true,
+    "elements": {
+      "panel-1": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "group": "influxdb",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "query": "from(bucket: \"q1_results\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"q1_result\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"dep_delay_mean\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: max, createEmpty: false)\r\n  |> yield(name: \"dep_delay_mean\")\r\n\r\n  "
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "",
+          "id": 1,
+          "links": [],
+          "title": "Mean departure delay",
+          "vizConfig": {
+            "group": "timeseries",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 0,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  },
+                  "displayName": "${__field.labels.airline}",
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "enableFacetedFilter": false,
+                  "overflow": "ellipsis",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              }
+            },
+            "version": "13.1.0"
+          }
+        }
+      },
+      "panel-10": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "group": "influxdb",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "query": "latest_timestamp = from(bucket: \"q2_results\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"q2_result\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"rank\")\r\n  |> filter(fn: (r) => r[\"window_size\"] == \"global\")\r\n  |> group()\r\n  |> last()\r\n  |> findRecord(fn: (key) => true, idx: 0)\r\n\r\ntarget_time = latest_timestamp._time\r\n\r\n  from(bucket: \"q2_results\")\r\n  |>range(start: target_time)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"q2_result\")\r\n  |> filter(fn: (r) => r[\"window_size\"] == \"global\")\r\n  |> filter(fn: (r) => r[\"_time\"] == target_time)\r\n  |> pivot(\r\n       rowKey: [\"_time\", \"airport\"],\r\n       columnKey: [\"_field\"],\r\n       valueColumn: \"_value\"\r\n     )\r\n  |> keep(columns: [\"_time\", \"airport\", \"rank\", \"num_flights\", \"severe_delays\", \"dep_delay_mean\", \"dep_delay_max\"])\r\n  |> group()\r\n  |> sort(columns: [\"rank\"])"
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": [
+                {
+                  "group": "organize",
+                  "kind": "Transformation",
+                  "spec": {
+                    "options": {
+                      "excludeByName": {},
+                      "includeByName": {},
+                      "indexByName": {
+                        "_time": 0,
+                        "airport": 2,
+                        "dep_delay_max": 5,
+                        "dep_delay_mean": 6,
+                        "num_flights": 3,
+                        "rank": 1,
+                        "severe_delays": 4
+                      },
+                      "renameByName": {
+                        "_time": "Timestamp",
+                        "airport": "",
+                        "dep_delay_max": "Maximum departure delay",
+                        "dep_delay_mean": "Mean departure delay",
+                        "num_flights": "Number of flights",
+                        "rank": "",
+                        "severe_delays": "Severe delays"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "description": "",
+          "id": 10,
+          "links": [],
+          "title": "Top 10 origin airport per severe delays - Global window",
+          "vizConfig": {
+            "group": "table",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "_time"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 201
+                      }
+                    ]
+                  }
+                ]
+              },
+              "options": {
+                "cellHeight": "sm",
+                "frameIndex": 0,
+                "showHeader": true
+              }
+            },
+            "version": "13.1.0"
+          }
+        }
+      },
+      "panel-11": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "group": "influxdb",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "query": "latest_timestamp = from(bucket: \"q2_results\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"delayed_flights\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"dep_delay\")\r\n  |> filter(fn: (r) => r[\"window_size\"] == \"1\")\r\n  |> filter(fn: (r) => r[\"origin_airport\"] == \"${airport_1h}\")\r\n  |> group()\r\n  |> last()\r\n  |> findRecord(fn: (key) => true, idx: 0)\r\n\r\ntarget_time = latest_timestamp._time\r\n\r\nfrom(bucket: \"q2_results\")\r\n  |> range(start: target_time)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"delayed_flights\")\r\n  |> filter(fn: (r) => r[\"window_size\"] == \"1\")\r\n  |> filter(fn: (r) => r[\"origin_airport\"] == \"${airport_1h}\")\r\n  |> filter(fn: (r) => r[\"_time\"] == target_time)\r\n  |> pivot(\r\n       rowKey: [\"_time\", \"origin_airport\", \"rank\"],\r\n       columnKey: [\"_field\"],\r\n       valueColumn: \"_value\"\r\n     )\r\n  |> group()\r\n  |> keep(columns: [\"rank\", \"airline\", \"dest_airport\", \"dep_delay\"])\r\n  |> map(fn: (r) => ({r with rank: int(v: r.rank)}))\r\n  |> sort(columns: [\"rank\"], desc: false)"
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": [
+                {
+                  "group": "organize",
+                  "kind": "Transformation",
+                  "spec": {
+                    "options": {
+                      "excludeByName": {},
+                      "includeByName": {},
+                      "indexByName": {
+                        "airline": 1,
+                        "dep_delay": 2,
+                        "dest_airport": 3,
+                        "rank": 0
+                      },
+                      "renameByName": {
+                        "delay_minutes": "Departure delay",
+                        "dest_airport": "Airport of destination"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "description": "",
+          "id": 11,
+          "links": [],
+          "title": "Top 20 fligths ordered by departure delay",
+          "vizConfig": {
+            "group": "table",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "cellHeight": "sm",
+                "showHeader": true
+              }
+            },
+            "version": "13.1.0"
+          }
+        }
+      },
+      "panel-12": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "group": "influxdb",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "query": "latest_timestamp = from(bucket: \"q2_results\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"delayed_flights\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"dep_delay\")\r\n  |> filter(fn: (r) => r[\"window_size\"] == \"1\")\r\n  |> filter(fn: (r) => r[\"origin_airport\"] == \"${airport_6h}\")\r\n  |> group()\r\n  |> last()\r\n  |> findRecord(fn: (key) => true, idx: 0)\r\n\r\ntarget_time = latest_timestamp._time\r\n\r\nfrom(bucket: \"q2_results\")\r\n  |> range(start: target_time)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"delayed_flights\")\r\n  |> filter(fn: (r) => r[\"window_size\"] == \"1\")\r\n  |> filter(fn: (r) => r[\"origin_airport\"] == \"${airport_6h}\")\r\n  |> filter(fn: (r) => r[\"_time\"] == target_time)\r\n  |> pivot(\r\n       rowKey: [\"_time\", \"origin_airport\", \"rank\"],\r\n       columnKey: [\"_field\"],\r\n       valueColumn: \"_value\"\r\n     )\r\n  |> group()\r\n  |> keep(columns: [\"rank\", \"airline\", \"dest_airport\", \"dep_delay\"])\r\n  |> map(fn: (r) => ({r with rank: int(v: r.rank)}))\r\n  |> sort(columns: [\"rank\"], desc: false)"
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": [
+                {
+                  "group": "organize",
+                  "kind": "Transformation",
+                  "spec": {
+                    "options": {
+                      "excludeByName": {},
+                      "includeByName": {},
+                      "indexByName": {
+                        "airline": 1,
+                        "dep_delay": 2,
+                        "dest_airport": 3,
+                        "rank": 0
+                      },
+                      "renameByName": {
+                        "delay_minutes": "Departure delay",
+                        "dest_airport": "Airport of destination"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "description": "",
+          "id": 12,
+          "links": [],
+          "title": "Top 20 fligths ordered by departure delay",
+          "vizConfig": {
+            "group": "table",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "cellHeight": "sm",
+                "showHeader": true
+              }
+            },
+            "version": "13.1.0"
+          }
+        }
+      },
+      "panel-13": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "group": "influxdb",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "query": "latest_timestamp = from(bucket: \"q2_results\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"delayed_flights\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"dep_delay\")\r\n  |> filter(fn: (r) => r[\"window_size\"] == \"1\")\r\n  |> filter(fn: (r) => r[\"origin_airport\"] == \"${airport_global}\")\r\n  |> group()\r\n  |> last()\r\n  |> findRecord(fn: (key) => true, idx: 0)\r\n\r\ntarget_time = latest_timestamp._time\r\n\r\nfrom(bucket: \"q2_results\")\r\n  |> range(start: target_time)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"delayed_flights\")\r\n  |> filter(fn: (r) => r[\"window_size\"] == \"1\")\r\n  |> filter(fn: (r) => r[\"origin_airport\"] == \"${airport_global}\")\r\n  |> filter(fn: (r) => r[\"_time\"] == target_time)\r\n  |> pivot(\r\n       rowKey: [\"_time\", \"origin_airport\", \"rank\"],\r\n       columnKey: [\"_field\"],\r\n       valueColumn: \"_value\"\r\n     )\r\n  |> group()\r\n  |> keep(columns: [\"rank\", \"airline\", \"dest_airport\", \"dep_delay\"])\r\n  |> map(fn: (r) => ({r with rank: int(v: r.rank)}))\r\n  |> sort(columns: [\"rank\"], desc: false)"
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": [
+                {
+                  "group": "organize",
+                  "kind": "Transformation",
+                  "spec": {
+                    "options": {
+                      "excludeByName": {},
+                      "includeByName": {},
+                      "indexByName": {},
+                      "renameByName": {
+                        "delay_minutes": "Departure delay",
+                        "dest_airport": "Airport of destination"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "description": "",
+          "id": 13,
+          "links": [],
+          "title": "Top 20 fligths ordered by departure delay",
+          "vizConfig": {
+            "group": "table",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "cellHeight": "sm",
+                "showHeader": true
+              }
+            },
+            "version": "13.1.0"
+          }
+        }
+      },
+      "panel-2": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "group": "influxdb",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "query": "from(bucket: \"q1_results\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"q1_result\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"num_flights\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: max, createEmpty: false)\r\n  |> yield(name: \"num_flights\")"
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "",
+          "id": 2,
+          "links": [],
+          "title": "Number of flights",
+          "vizConfig": {
+            "group": "timeseries",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 0,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  },
+                  "displayName": "${__field.labels.airline}",
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "enableFacetedFilter": false,
+                  "overflow": "ellipsis",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              }
+            },
+            "version": "13.1.0"
+          }
+        }
+      },
+      "panel-3": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "group": "influxdb",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "query": "from(bucket: \"q1_results\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"q1_result\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"cancellation_rate\")\r\n  |> last()\r\n  |> yield(name: \"last\")"
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "",
+          "id": 3,
+          "links": [],
+          "title": "Cancellation rate",
+          "vizConfig": {
+            "group": "gauge",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "displayName": "${__field.labels.airline}",
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "barShape": "flat",
+                "barWidthFactor": 0.5,
+                "effects": {
+                  "barGlow": false,
+                  "centerGlow": false,
+                  "gradient": true
+                },
+                "endpointMarker": "point",
+                "minVizHeight": 75,
+                "minVizWidth": 75,
+                "orientation": "auto",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "segmentCount": 1,
+                "segmentSpacing": 0.3,
+                "shape": "gauge",
+                "showThresholdLabels": false,
+                "showThresholdMarkers": true,
+                "sizing": "auto",
+                "sparkline": true,
+                "textMode": "auto"
+              }
+            },
+            "version": "13.1.0"
+          }
+        }
+      },
+      "panel-4": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "group": "influxdb",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "query": "from(bucket: \"q1_results\")\r\n|>range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n|>filter(fn: (r) => r[\"_measurement\"]==\"q1_result\")\r\n|>filter(fn: (r) => r[\"_field\"]==\"late_departure_rate\")\r\n|>last()\r\n|>yield(name:\"late_departure_rate\")"
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Value mappings:\n0-10 Regular\n10-20 Congestion\n20-100 Critical",
+          "id": 4,
+          "links": [],
+          "title": "Late departure rate",
+          "vizConfig": {
+            "group": "state-timeline",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "continuous-GrYlRd"
+                  },
+                  "custom": {
+                    "axisPlacement": "auto",
+                    "fillOpacity": 70,
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineWidth": 0,
+                    "spanNulls": false
+                  },
+                  "displayName": "${__field.labels.airline}",
+                  "mappings": [
+                    {
+                      "options": {
+                        "from": 0,
+                        "result": {
+                          "color": "dark-green",
+                          "index": 0,
+                          "text": "Regular"
+                        },
+                        "to": 10
+                      },
+                      "type": "range"
+                    },
+                    {
+                      "options": {
+                        "from": 10,
+                        "result": {
+                          "color": "dark-yellow",
+                          "index": 1,
+                          "text": "Congestion"
+                        },
+                        "to": 20
+                      },
+                      "type": "range"
+                    },
+                    {
+                      "options": {
+                        "from": 20,
+                        "result": {
+                          "color": "dark-red",
+                          "index": 2,
+                          "text": "Critical"
+                        },
+                        "to": 100
+                      },
+                      "type": "range"
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "alignValue": "left",
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "displayMode": "list",
+                  "overflow": "ellipsis",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "mergeValues": true,
+                "rowHeight": 0.9,
+                "showValue": "auto",
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              }
+            },
+            "version": "13.1.0"
+          }
+        }
+      },
+      "panel-5": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "group": "influxdb",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "query": "from(bucket: \"q1_results\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"q1_result\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"completed\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: max, createEmpty: false)\r\n  |> yield(name: \"completed_flights\")"
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "",
+          "id": 5,
+          "links": [],
+          "title": "Completed flights",
+          "vizConfig": {
+            "group": "timeseries",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 0,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  },
+                  "displayName": "${__field.labels.airline}",
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "enableFacetedFilter": false,
+                  "overflow": "ellipsis",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              }
+            },
+            "version": "13.1.0"
+          }
+        }
+      },
+      "panel-6": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "group": "influxdb",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "query": "from(bucket: \"q1_results\")\r\n|>range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n|>filter(fn: (r) => r[\"_measurement\"] == \"q1_result\")\r\n|>filter(fn: (r) => r[\"_field\"] == \"diverted\")\r\n|>aggregateWindow(every: v.windowPeriod, fn: max, createEmpty: false)\r\n|>yield(name: \"diverted\")"
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "",
+          "id": 6,
+          "links": [],
+          "title": "Diverted flights",
+          "vizConfig": {
+            "group": "timeseries",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 0,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  },
+                  "displayName": "${__field.labels.airline}",
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "enableFacetedFilter": false,
+                  "overflow": "ellipsis",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              }
+            },
+            "version": "13.1.0"
+          }
+        }
+      },
+      "panel-7": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "group": "influxdb",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "query": "from(bucket: \"q1_results\")\r\n|> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n|>filter(fn: (r) => r[\"_measurement\"] == \"q1_result\")\r\n|>filter(fn: (r) => r[\"_field\"] == \"cancelled\")\r\n|>aggregateWindow(every: v.windowPeriod, fn: max, createEmpty: false)\r\n|>yield(name: \"cancelled\")"
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "",
+          "id": 7,
+          "links": [],
+          "title": "Cancelled flights",
+          "vizConfig": {
+            "group": "timeseries",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 0,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  },
+                  "displayName": "${__field.labels.airline}",
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "enableFacetedFilter": false,
+                  "overflow": "ellipsis",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              }
+            },
+            "version": "13.1.0"
+          }
+        }
+      },
+      "panel-8": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "group": "influxdb",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "query": "latest_timestamp = from(bucket: \"q2_results\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"q2_result\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"rank\")\r\n  |> filter(fn: (r) => r[\"window_size\"] == \"1\")\r\n  |> group()\r\n  |> last()\r\n  |> findRecord(fn: (key) => true, idx: 0)\r\n\r\ntarget_time = latest_timestamp._time\r\n\r\n  from(bucket: \"q2_results\")\r\n  |>range(start: target_time)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"q2_result\")\r\n  |> filter(fn: (r) => r[\"window_size\"] == \"1\")\r\n  |> filter(fn: (r) => r[\"_time\"] == target_time)\r\n  |> pivot(\r\n       rowKey: [\"_time\", \"airport\"],\r\n       columnKey: [\"_field\"],\r\n       valueColumn: \"_value\"\r\n     )\r\n  |> keep(columns: [\"_time\", \"airport\", \"rank\", \"num_flights\", \"severe_delays\", \"dep_delay_mean\", \"dep_delay_max\"])\r\n  |> group()\r\n  |> sort(columns: [\"rank\"])"
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": [
+                {
+                  "group": "organize",
+                  "kind": "Transformation",
+                  "spec": {
+                    "options": {
+                      "excludeByName": {},
+                      "includeByName": {},
+                      "indexByName": {
+                        "_time": 0,
+                        "airport": 2,
+                        "dep_delay_max": 5,
+                        "dep_delay_mean": 6,
+                        "num_flights": 3,
+                        "rank": 1,
+                        "severe_delays": 4
+                      },
+                      "renameByName": {
+                        "_time": "Timestamp",
+                        "airport": "",
+                        "dep_delay_max": "Maximum departure delay",
+                        "dep_delay_mean": "Mean departure delay",
+                        "num_flights": "Number of flights",
+                        "rank": "",
+                        "severe_delays": "Severe delays"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "description": "",
+          "id": 8,
+          "links": [],
+          "title": "Top 10 origin airport per severe delays",
+          "vizConfig": {
+            "group": "table",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "_time"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 201
+                      }
+                    ]
+                  }
+                ]
+              },
+              "options": {
+                "cellHeight": "sm",
+                "frameIndex": 0,
+                "showHeader": true
+              }
+            },
+            "version": "13.1.0"
+          }
+        }
+      },
+      "panel-9": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "group": "influxdb",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "query": "latest_timestamp = from(bucket: \"q2_results\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"q2_result\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"rank\")\r\n  |> filter(fn: (r) => r[\"window_size\"] == \"6\")\r\n  |> group()\r\n  |> last()\r\n  |> findRecord(fn: (key) => true, idx: 0)\r\n\r\ntarget_time = latest_timestamp._time\r\n\r\n  from(bucket: \"q2_results\")\r\n  |>range(start: target_time)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"q2_result\")\r\n  |> filter(fn: (r) => r[\"window_size\"] == \"6\")\r\n  |> filter(fn: (r) => r[\"_time\"] == target_time)\r\n  |> pivot(\r\n       rowKey: [\"_time\", \"airport\"],\r\n       columnKey: [\"_field\"],\r\n       valueColumn: \"_value\"\r\n     )\r\n  |> keep(columns: [\"_time\", \"airport\", \"rank\", \"num_flights\", \"severe_delays\", \"dep_delay_mean\", \"dep_delay_max\"])\r\n  |> group()\r\n  |> sort(columns: [\"rank\"])"
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": [
+                {
+                  "group": "organize",
+                  "kind": "Transformation",
+                  "spec": {
+                    "options": {
+                      "excludeByName": {},
+                      "includeByName": {},
+                      "indexByName": {
+                        "_time": 0,
+                        "airport": 2,
+                        "dep_delay_max": 5,
+                        "dep_delay_mean": 6,
+                        "num_flights": 3,
+                        "rank": 1,
+                        "severe_delays": 4
+                      },
+                      "renameByName": {
+                        "_time": "Timestamp",
+                        "airport": "",
+                        "dep_delay_max": "Maximum departure delay",
+                        "dep_delay_mean": "Mean departure delay",
+                        "num_flights": "Number of flights",
+                        "rank": "",
+                        "severe_delays": "Severe delays"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "description": "",
+          "id": 9,
+          "links": [],
+          "title": "Top 10 origin airport per severe delays - 6H window",
+          "vizConfig": {
+            "group": "table",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "_time"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.width",
+                        "value": 201
+                      }
+                    ]
+                  }
+                ]
+              },
+              "options": {
+                "cellHeight": "sm",
+                "frameIndex": 0,
+                "showHeader": true,
+                "sortBy": []
+              }
+            },
+            "version": "13.1.0"
+          }
+        }
+      }
+    },
+    "layout": {
+      "kind": "TabsLayout",
+      "spec": {
+        "tabs": [
+          {
+            "kind": "TabsLayoutTab",
+            "spec": {
+              "layout": {
+                "kind": "GridLayout",
+                "spec": {
+                  "items": [
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-1"
+                        },
+                        "height": 8,
+                        "width": 12,
+                        "x": 0,
+                        "y": 0
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-2"
+                        },
+                        "height": 8,
+                        "width": 12,
+                        "x": 12,
+                        "y": 0
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-5"
+                        },
+                        "height": 7,
+                        "width": 12,
+                        "x": 0,
+                        "y": 8
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-6"
+                        },
+                        "height": 8,
+                        "width": 12,
+                        "x": 12,
+                        "y": 8
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-7"
+                        },
+                        "height": 8,
+                        "width": 12,
+                        "x": 0,
+                        "y": 15
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-4"
+                        },
+                        "height": 8,
+                        "width": 12,
+                        "x": 12,
+                        "y": 16
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-3"
+                        },
+                        "height": 8,
+                        "width": 12,
+                        "x": 0,
+                        "y": 23
+                      }
+                    }
+                  ]
+                }
+              },
+              "title": "Query 1 results"
+            }
+          },
+          {
+            "kind": "TabsLayoutTab",
+            "spec": {
+              "layout": {
+                "kind": "RowsLayout",
+                "spec": {
+                  "rows": [
+                    {
+                      "kind": "RowsLayoutRow",
+                      "spec": {
+                        "collapse": false,
+                        "layout": {
+                          "kind": "GridLayout",
+                          "spec": {
+                            "items": [
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-8"
+                                  },
+                                  "height": 16,
+                                  "width": 24,
+                                  "x": 0,
+                                  "y": 0
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-11"
+                                  },
+                                  "height": 7,
+                                  "width": 24,
+                                  "x": 0,
+                                  "y": 16
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        "title": "1H window"
+                      }
+                    },
+                    {
+                      "kind": "RowsLayoutRow",
+                      "spec": {
+                        "collapse": false,
+                        "layout": {
+                          "kind": "GridLayout",
+                          "spec": {
+                            "items": [
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-9"
+                                  },
+                                  "height": 14,
+                                  "width": 24,
+                                  "x": 0,
+                                  "y": 0
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-12"
+                                  },
+                                  "height": 7,
+                                  "width": 24,
+                                  "x": 0,
+                                  "y": 14
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        "title": "6H window"
+                      }
+                    },
+                    {
+                      "kind": "RowsLayoutRow",
+                      "spec": {
+                        "collapse": false,
+                        "layout": {
+                          "kind": "GridLayout",
+                          "spec": {
+                            "items": [
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-10"
+                                  },
+                                  "height": 14,
+                                  "width": 24,
+                                  "x": 0,
+                                  "y": 0
+                                }
+                              },
+                              {
+                                "kind": "GridLayoutItem",
+                                "spec": {
+                                  "element": {
+                                    "kind": "ElementReference",
+                                    "name": "panel-13"
+                                  },
+                                  "height": 7,
+                                  "width": 24,
+                                  "x": 0,
+                                  "y": 14
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        "title": "Global window"
+                      }
+                    }
+                  ]
+                }
+              },
+              "title": "Query 2 results"
+            }
+          }
+        ]
+      }
+    },
+    "links": [],
+    "liveNow": false,
+    "preferences": {
+      "layout": {
+        "kind": "GridLayout",
+        "spec": {
+          "items": []
+        }
+      }
+    },
+    "preload": false,
+    "tags": [],
+    "timeSettings": {
+      "autoRefresh": "10s",
+      "autoRefreshIntervals": [
+        "5s",
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ],
+      "fiscalYearStartMonth": 0,
+      "from": "2025-01-01T00:00:00.000Z",
+      "hideTimepicker": false,
+      "timezone": "browser",
+      "to": "2025-06-01T00:00:00.000Z"
+    },
+    "title": "Query results",
+    "variables": [
+      {
+        "kind": "QueryVariable",
+        "spec": {
+          "allowCustomValue": true,
+          "current": {
+            "text": "10397",
+            "value": "10397"
+          },
+          "definition": "latest_timestamp = from(bucket: \"q2_results\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"q2_result\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"rank\")\r\n  |> filter(fn: (r) => r[\"window_size\"] == \"1\")\r\n  |> group()\r\n  |> last()\r\n  |> findRecord(fn: (key) => true, idx: 0)\r\n\r\ntarget_time = latest_timestamp._time\r\n\r\nfrom(bucket: \"q2_results\")\r\n  |> range(start: target_time)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"q2_result\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"rank\")\r\n  |> filter(fn: (r) => r[\"window_size\"] == \"1\")\r\n  |> filter(fn: (r) => r[\"_time\"] == target_time)\r\n  |> keep(columns: [\"airport\"])\r\n  |> distinct(column: \"airport\")",
+          "hide": "dontHide",
+          "includeAll": false,
+          "label": "Origin airport 1H",
+          "multi": false,
+          "name": "airport_1h",
+          "options": [],
+          "query": {
+            "group": "influxdb",
+            "kind": "DataQuery",
+            "spec": {
+              "maxDataPoints": 1000,
+              "query": "latest_timestamp = from(bucket: \"q2_results\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"q2_result\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"rank\")\r\n  |> filter(fn: (r) => r[\"window_size\"] == \"1\")\r\n  |> group()\r\n  |> last()\r\n  |> findRecord(fn: (key) => true, idx: 0)\r\n\r\ntarget_time = latest_timestamp._time\r\n\r\nfrom(bucket: \"q2_results\")\r\n  |> range(start: target_time)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"q2_result\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"rank\")\r\n  |> filter(fn: (r) => r[\"window_size\"] == \"1\")\r\n  |> filter(fn: (r) => r[\"_time\"] == target_time)\r\n  |> keep(columns: [\"airport\"])\r\n  |> distinct(column: \"airport\")",
+              "refId": "InfluxVariableQueryEditor-VariableQuery"
+            },
+            "version": "v0"
+          },
+          "refresh": "onTimeRangeChanged",
+          "regex": "",
+          "regexApplyTo": "value",
+          "skipUrlSync": false,
+          "sort": "disabled"
+        }
+      },
+      {
+        "kind": "QueryVariable",
+        "spec": {
+          "allowCustomValue": true,
+          "current": {
+            "text": "10397",
+            "value": "10397"
+          },
+          "definition": "latest_timestamp = from(bucket: \"q2_results\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"q2_result\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"rank\")\r\n  |> filter(fn: (r) => r[\"window_size\"] == \"6\")\r\n  |> group()\r\n  |> last()\r\n  |> findRecord(fn: (key) => true, idx: 0)\r\n\r\ntarget_time = latest_timestamp._time\r\n\r\nfrom(bucket: \"q2_results\")\r\n  |> range(start: target_time)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"q2_result\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"rank\")\r\n  |> filter(fn: (r) => r[\"window_size\"] == \"6\")\r\n  |> filter(fn: (r) => r[\"_time\"] == target_time)\r\n  |> keep(columns: [\"airport\"])\r\n  |> distinct(column: \"airport\")",
+          "hide": "dontHide",
+          "includeAll": false,
+          "label": "Origin airport 6H",
+          "multi": false,
+          "name": "airport_6h",
+          "options": [],
+          "query": {
+            "datasource": {
+              "name": "PEA98F4C3D7EC02B9"
+            },
+            "group": "influxdb",
+            "kind": "DataQuery",
+            "spec": {
+              "query": "latest_timestamp = from(bucket: \"q2_results\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"q2_result\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"rank\")\r\n  |> filter(fn: (r) => r[\"window_size\"] == \"6\")\r\n  |> group()\r\n  |> last()\r\n  |> findRecord(fn: (key) => true, idx: 0)\r\n\r\ntarget_time = latest_timestamp._time\r\n\r\nfrom(bucket: \"q2_results\")\r\n  |> range(start: target_time)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"q2_result\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"rank\")\r\n  |> filter(fn: (r) => r[\"window_size\"] == \"6\")\r\n  |> filter(fn: (r) => r[\"_time\"] == target_time)\r\n  |> keep(columns: [\"airport\"])\r\n  |> distinct(column: \"airport\")"
+            },
+            "version": "v0"
+          },
+          "refresh": "onTimeRangeChanged",
+          "regex": "",
+          "regexApplyTo": "value",
+          "skipUrlSync": false,
+          "sort": "disabled"
+        }
+      },
+      {
+        "kind": "QueryVariable",
+        "spec": {
+          "allowCustomValue": true,
+          "current": {
+            "text": "10397",
+            "value": "10397"
+          },
+          "definition": "latest_timestamp = from(bucket: \"q2_results\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"q2_result\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"rank\")\r\n  |> filter(fn: (r) => r[\"window_size\"] == \"global\")\r\n  |> group()\r\n  |> last()\r\n  |> findRecord(fn: (key) => true, idx: 0)\r\n\r\ntarget_time = latest_timestamp._time\r\n\r\nfrom(bucket: \"q2_results\")\r\n  |> range(start: target_time)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"q2_result\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"rank\")\r\n  |> filter(fn: (r) => r[\"window_size\"] == \"global\")\r\n  |> filter(fn: (r) => r[\"_time\"] == target_time)\r\n  |> keep(columns: [\"airport\"])\r\n  |> distinct(column: \"airport\")",
+          "hide": "dontHide",
+          "includeAll": false,
+          "label": "Origin airport global",
+          "multi": false,
+          "name": "airport_global",
+          "options": [],
+          "query": {
+            "datasource": {
+              "name": "PEA98F4C3D7EC02B9"
+            },
+            "group": "influxdb",
+            "kind": "DataQuery",
+            "spec": {
+              "query": "latest_timestamp = from(bucket: \"q2_results\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"q2_result\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"rank\")\r\n  |> filter(fn: (r) => r[\"window_size\"] == \"global\")\r\n  |> group()\r\n  |> last()\r\n  |> findRecord(fn: (key) => true, idx: 0)\r\n\r\ntarget_time = latest_timestamp._time\r\n\r\nfrom(bucket: \"q2_results\")\r\n  |> range(start: target_time)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"q2_result\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"rank\")\r\n  |> filter(fn: (r) => r[\"window_size\"] == \"global\")\r\n  |> filter(fn: (r) => r[\"_time\"] == target_time)\r\n  |> keep(columns: [\"airport\"])\r\n  |> distinct(column: \"airport\")"
+            },
+            "version": "v0"
+          },
+          "refresh": "onTimeRangeChanged",
+          "regex": "",
+          "regexApplyTo": "value",
+          "skipUrlSync": false,
+          "sort": "disabled"
+        }
+      }
+    ]
+  }
+}
