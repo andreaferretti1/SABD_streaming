@@ -17,24 +17,24 @@ public class Main {
         KafkaSource<FlightEvent> kafkaSource = KafkaSource.<FlightEvent>builder()
                 .setBootstrapServers("kafka:9092")
                 .setTopics("data")
+                .setGroupId("sabd-group-" + System.currentTimeMillis())
                 .setStartingOffsets(OffsetsInitializer.earliest())
                 .setDeserializer(new JSONDeserializationSchema())
                 .build();
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        env.setParallelism(2);
 
 
         DataStream<FlightEvent> stream = env.fromSource(kafkaSource,
                 WatermarkStrategy.<FlightEvent>forMonotonousTimestamps()
                         .withTimestampAssigner((event, timestamp) -> timestamp),
                 "kafkaSource")
-                .setParallelism(1);
+                .setParallelism(4);
 
         Query1.executeQuery(stream);
         Query2.executeQuery(stream);
 
-        env.execute("flight_job");
+        env.execute();
 
     }
 

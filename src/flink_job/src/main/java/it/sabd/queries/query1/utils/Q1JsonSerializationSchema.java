@@ -48,7 +48,7 @@ public class Q1JsonSerializationSchema implements KafkaRecordSerializationSchema
             return new ProducerRecord<>(this.topic, null, recordByte);
 
         } catch (Exception e){
-            throw new RuntimeException("Errore serializzazione JSON per Query 2", e);
+            throw new RuntimeException("Errore serializzazione JSON per Query 1", e);
 
         }
 

@@ -12,10 +12,10 @@ def main():
 
     # Tabella per invocare la funzione di processamento corretta
     routing_table = {
-        "q1_results": process_q1_result,
-        "q2_results_1h": process_q2_result,
-        "q2_results_6h": process_q2_result,
-        "q2_results_global": process_q2_result
+        "q1-results": process_q1_result,
+        "q2-results-1h": process_q2_result,
+        "q2-results-6h": process_q2_result,
+        "q2-results-global": process_q2_result
     }
 
     # Scrivo gli header nei file csv

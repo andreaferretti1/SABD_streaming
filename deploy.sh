@@ -33,7 +33,7 @@ docker exec kafka /opt/kafka/bin/kafka-topics.sh \
     --create \
     --if-not-exists \
     --bootstrap-server localhost:9092 \
-    --partitions 1 \
+    --partitions 4 \
     --replication-factor 1 \
     --topic data
 
@@ -41,33 +41,33 @@ docker exec kafka /opt/kafka/bin/kafka-topics.sh \
     --create \
     --if-not-exists \
     --bootstrap-server localhost:9092 \
-    --partitions 1 \
+    --partitions 4 \
     --replication-factor 1 \
-    --topic q1_results
+    --topic q1-results
 
 docker exec kafka /opt/kafka/bin/kafka-topics.sh \
     --create \
     --if-not-exists \
     --bootstrap-server localhost:9092 \
-    --partitions 1 \
+    --partitions 4 \
     --replication-factor 1 \
-    --topic q2_results_1h
+    --topic q2-results-1h
 
 docker exec kafka /opt/kafka/bin/kafka-topics.sh \
     --create \
     --if-not-exists \
     --bootstrap-server localhost:9092 \
-    --partitions 1 \
+    --partitions 4 \
     --replication-factor 1 \
-    --topic q2_results_6h
+    --topic q2-results-6h
 
 docker exec kafka /opt/kafka/bin/kafka-topics.sh \
     --create \
     --if-not-exists \
     --bootstrap-server localhost:9092 \
-    --partitions 1 \
+    --partitions 4 \
     --replication-factor 1 \
-    --topic q2_results_global
+    --topic q2-results-global
 
 echo "Topic creati"
 

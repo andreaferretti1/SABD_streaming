@@ -14,22 +14,22 @@ docker exec kafka /opt/kafka/bin/kafka-topics.sh \
 
 docker exec kafka /opt/kafka/bin/kafka-topics.sh \
     --delete \
-    --topic q1_results \
+    --topic q1-results \
     --bootstrap-server localhost:9092
 
 docker exec kafka /opt/kafka/bin/kafka-topics.sh \
     --delete \
-    --topic q2_results_1h \
+    --topic q2-results-1h \
     --bootstrap-server localhost:9092
 
 docker exec kafka /opt/kafka/bin/kafka-topics.sh \
     --delete \
-    --topic q2_results_6h \
+    --topic q2-results-6h \
     --bootstrap-server localhost:9092
 
 docker exec kafka /opt/kafka/bin/kafka-topics.sh \
     --delete \
-    --topic q2_results_global \
+    --topic q2-results-global \
     --bootstrap-server localhost:9092
 
 echo "Topic eliminati"

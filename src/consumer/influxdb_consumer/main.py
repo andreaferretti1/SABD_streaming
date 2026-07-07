@@ -12,10 +12,10 @@ def main():
 
     # Tabella per invocare la funzione di processamento corretta
     routing_table = {
-        "q1_results": partial(process_q1_result, write_api=write_api, bucket="q1_results"),
-        "q2_results_1h": partial(process_q2_result, write_api=write_api, bucket="q2_results"),
-        "q2_results_6h": partial(process_q2_result, write_api=write_api, bucket="q2_results"),
-        "q2_results_global": partial(process_q2_result, write_api=write_api, bucket="q2_results")
+        "q1-results": partial(process_q1_result, write_api=write_api, bucket="q1_results"),
+        "q2-results-1h": partial(process_q2_result, write_api=write_api, bucket="q2_results"),
+        "q2-results-6h": partial(process_q2_result, write_api=write_api, bucket="q2_results"),
+        "q2-results-global": partial(process_q2_result, write_api=write_api, bucket="q2_results")
     }
 
     # Istanzio il consumer

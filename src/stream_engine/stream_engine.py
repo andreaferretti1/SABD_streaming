@@ -56,7 +56,7 @@ def generate_stream():
             time.sleep(deltas[i] / speedup_factor)
 
         payload = json.dumps(record, ignore_nan = True)
-        send_message(producer=producer, topic=topic, payload=payload, timestamp=event_times[i])
+        send_message(producer=producer, topic=topic, payload=payload, timestamp=int(event_times[i] * 1000))
 
         if i % 5000 == 0:
             producer.poll(0)

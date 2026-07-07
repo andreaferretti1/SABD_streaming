@@ -4,8 +4,7 @@ from confluent_kafka import Producer
 def get_producer():
     config = {
         'bootstrap.servers': 'kafka:9092',
-        'acks': 'all',
-        'enable.idempotence': True
+        'acks': 1,
         # retries lasciato a 2147483647
         # linger.ms lasciato a 5ms
         # queued.max.messages.kbytes lasciato a 64MB
@@ -23,4 +22,4 @@ def callback(err, msg):
 # Questa funzione invia un messaggio
 def send_message(producer, topic, payload, timestamp):
 
-    producer.produce(topic = topic, value = payload, timestamp = timestamp * 1000, on_delivery = callback)
+    producer.produce(topic = topic, value = payload, timestamp = timestamp, on_delivery = callback)
