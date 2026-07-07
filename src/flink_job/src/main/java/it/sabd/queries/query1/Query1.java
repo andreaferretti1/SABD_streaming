@@ -1,10 +1,7 @@
 package it.sabd.queries.query1;
 
 import it.sabd.FlightEvent;
-import it.sabd.queries.query1.utils.Q1AggregateData;
-import it.sabd.queries.query1.utils.Q1JsonSerializationSchema;
-import it.sabd.queries.query1.utils.Q1ProcessData;
-import it.sabd.queries.query1.utils.Q1ResultWithTime;
+import it.sabd.queries.query1.utils.*;
 import org.apache.flink.connector.base.DeliveryGuarantee;
 import org.apache.flink.connector.kafka.sink.KafkaSink;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -30,8 +27,9 @@ public class Query1 {
                 .keyBy(event -> event.OP_UNIQUE_CARRIER)
                 .window(TumblingEventTimeWindows.of(Duration.ofHours(1)))
                 .aggregate(new Q1AggregateData(), new Q1ProcessData())
+                .process(new GaugeFunction())
                 .sinkTo(kafkaSink)
-                .setParallelism(1);
+                .setParallelism(4);
 
     }
 

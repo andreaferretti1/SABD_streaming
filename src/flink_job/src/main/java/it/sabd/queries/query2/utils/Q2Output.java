@@ -6,6 +6,7 @@ import java.util.List;
 
 public class Q2Output {
 
+    public long minIngestionTime;
     public long startWindow;
     public int originAirport;
     public int notCancDivFlights;
@@ -18,13 +19,15 @@ public class Q2Output {
     public Q2Output(){}
 
 
-    public Q2Output(long startWindow,
+    public Q2Output(long minIngestionTime,
+                    long startWindow,
                     int originAirport,
                     int totalFlights,
                     int totSignificantDelayedFLights,
                     Double depDelayMean,
                     Double maxDepDelay,
                     List<Tuple3<String, Integer, Double>> top20significantDelayedFLights) {
+        this.minIngestionTime = minIngestionTime;
         this.startWindow = startWindow;
         this.originAirport = originAirport;
         this.notCancDivFlights = totalFlights;

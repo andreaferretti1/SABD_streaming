@@ -2,6 +2,7 @@ package it.sabd.queries.query1.utils;
 
 public class Q1Result {
 
+    public long minIngestionTime;
     public int totalFlights;
     public int completed;
     public int cancelled;
@@ -14,6 +15,7 @@ public class Q1Result {
     public Q1Result(){}
 
     public Q1Result(Q1Result other) {
+        this.minIngestionTime = other.minIngestionTime;
         this.totalFlights = other.totalFlights;
         this.completed = other.completed;
         this.cancelled = other.cancelled;
@@ -27,7 +29,7 @@ public class Q1Result {
     public static Q1Result computeResult(Q1Accumulator acc){
 
         Q1Result result = new Q1Result();
-
+        result.minIngestionTime = acc.ingestionTime;
         result.totalFlights = acc.totalFlights;
         result.completed = acc.completed;
         result.cancelled = acc.cancelled;

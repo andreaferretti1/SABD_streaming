@@ -8,6 +8,7 @@ import java.util.PriorityQueue;
 
 public class Q2Accumulator {
 
+    public long ingestionTime = Long.MAX_VALUE;
     public int notCancDivFlights = 0;
     public int totSignificantDelay = 0;
     public Double totDepDelay = null;
@@ -20,6 +21,8 @@ public class Q2Accumulator {
 
 
     public void addFlight(FlightEvent event) {
+
+        this.ingestionTime = Math.min(this.ingestionTime, event.ingestionTime);
 
         Double depDelay = event.DEP_DELAY;
 
@@ -53,6 +56,7 @@ public class Q2Accumulator {
 
     public void mergeAccumulator(Q2Accumulator acc){
 
+        this.ingestionTime = Math.min(this.ingestionTime, acc.ingestionTime);
         this.notCancDivFlights = this.notCancDivFlights + acc.notCancDivFlights;
         this.totSignificantDelay = this.totSignificantDelay + acc.totSignificantDelay;
 

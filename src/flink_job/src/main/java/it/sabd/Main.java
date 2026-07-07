@@ -29,7 +29,11 @@ public class Main {
                 WatermarkStrategy.<FlightEvent>forMonotonousTimestamps()
                         .withTimestampAssigner((event, timestamp) -> timestamp),
                 "kafkaSource")
-                .setParallelism(4);
+                .setParallelism(4)
+                .map(event -> {
+                    event.ingestionTime = System.currentTimeMillis();
+                    return event;
+                });
 
         Query1.executeQuery(stream);
         Query2.executeQuery(stream);

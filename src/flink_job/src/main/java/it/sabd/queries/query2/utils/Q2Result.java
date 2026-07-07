@@ -10,6 +10,7 @@ import java.util.PriorityQueue;
 
 public class Q2Result {
 
+    public long minIngestionTime;
     public int notCancDivFlights;
     public int totSignificantDelayedFLights;
     public Double depDelayMean;
@@ -24,6 +25,7 @@ public class Q2Result {
 
         Q2Result result = new Q2Result();
 
+        result.minIngestionTime = acc.ingestionTime;
         result.notCancDivFlights = acc.notCancDivFlights;
         result.totSignificantDelayedFLights = acc.totSignificantDelay;
 
