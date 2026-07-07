@@ -1,11 +1,15 @@
 package it.sabd;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.Serializable;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class FlightEvent implements Serializable {
+
+    @JsonIgnore
+    public long ingestionTime;
 
     public String OP_UNIQUE_CARRIER;
     public int ORIGIN_AIRPORT_ID;

@@ -24,6 +24,7 @@ public class Q2ProcessGlobalData extends ProcessWindowFunction<Q2Result, Q2Outpu
         Q2Result result = results.iterator().next();
 
         Q2Output output = new Q2Output(
+                result.minIngestionTime,
                 startWindow,
                 originAirport,
                 result.notCancDivFlights,

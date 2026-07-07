@@ -8,5 +8,8 @@ RUN mvn package -DskipTests
 
 
 FROM flink:1.20.4-java17
-RUN cp /opt/flink/opt/flink-metrics-influxdb-*.jar /opt/flink/lib/
+
+RUN mkdir -p /opt/flink/plugins/influxdb && \
+    cp /opt/flink/opt/flink-metrics-influxdb-*.jar /opt/flink/plugins/influxdb/
+
 COPY --from=builder /app/target/flink_job-1.jar /opt/flink/usrlib/

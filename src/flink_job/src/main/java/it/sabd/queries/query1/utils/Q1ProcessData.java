@@ -8,7 +8,6 @@ import org.apache.flink.util.Collector;
 public class Q1ProcessData extends ProcessWindowFunction<Q1Result, Q1ResultWithTime, String, TimeWindow> {
 
 
-
     @Override
     public void process(String airline,
                         ProcessWindowFunction<Q1Result, Q1ResultWithTime, String, TimeWindow>.Context context,
@@ -24,4 +23,6 @@ public class Q1ProcessData extends ProcessWindowFunction<Q1Result, Q1ResultWithT
 
         collector.collect(resultWithTime);
     }
+
+
 }

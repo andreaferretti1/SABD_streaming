@@ -2,6 +2,7 @@ package it.sabd.queries.query1.utils;
 
 public class Q1ResultWithTime extends Q1Result{
 
+
     public long startWindow;
     public long endWindow;
     public String airline;

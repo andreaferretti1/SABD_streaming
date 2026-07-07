@@ -22,19 +22,11 @@ def callback(err, msg):
 # Questa funzione invia un messaggio
 def send_message(producer, topic, payload, timestamp):
     
-    ts = int(timestamp)
-    if not hasattr(send_message, '_count'):
-        send_message._count= 0
-    if send_message._count<5:
-        print(f'Debug ts = {ts}, type={type(ts)}, len={len(str(ts))}', flush = True)
+
     producer.produce(topic = topic, value = payload, timestamp = int(timestamp), on_delivery = callback)
 
 
 
 def send_message_with_partition(producer, topic, payload, timestamp, partition):
-    ts = int(timestamp)
-    if not hasattr(send_message, '_count'):
-        send_message._count= 0
-    if send_message._count<5:
-        print(f'Debug ts = {ts}, type={type(ts)}, len={len(str(ts))}', flush = True)
+
     producer.produce(topic = topic, value = payload, timestamp = int(timestamp), on_delivery = callback, partition = partition)

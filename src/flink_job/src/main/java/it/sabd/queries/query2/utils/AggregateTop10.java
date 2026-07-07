@@ -3,51 +3,33 @@ package it.sabd.queries.query2.utils;
 import org.apache.flink.api.common.functions.AggregateFunction;
 
 
-import java.util.*;
-
-public class AggregateTop10 implements AggregateFunction<Q2Output, PriorityQueue<Q2Output>, List<Q2Output>> {
+public class AggregateTop10 implements AggregateFunction<Q2Output, Top10Accumulator, Top10Output> {
 
     @Override
-    public PriorityQueue<Q2Output> createAccumulator() {
-        return new PriorityQueue<Q2Output>(10, Comparator.comparingInt(output -> output.totSignificantDelayedFLights));
+    public Top10Accumulator createAccumulator() {
+        return new Top10Accumulator();
     }
 
     @Override
-    public PriorityQueue<Q2Output> add(Q2Output output, PriorityQueue<Q2Output> queue) {
-       if(queue.size() < 10){
-           queue.offer(output);
-       } else {
-           Q2Output min = queue.peek();
+    public Top10Accumulator add(Q2Output output, Top10Accumulator acc) {
 
-           if(output.totSignificantDelayedFLights > min.totSignificantDelayedFLights){
-               queue.poll();
-               queue.offer(output);
-           }
-       }
+        acc.addEvent(output);
 
-       return queue;
+        return acc;
     }
 
     @Override
-    public List<Q2Output> getResult(PriorityQueue<Q2Output> queue) {
-        List<Q2Output> top10 = new ArrayList<Q2Output>();
-        PriorityQueue<Q2Output> queueCopy = new PriorityQueue<>(queue);
-
-        while (!queueCopy.isEmpty()) {
-            top10.add(queueCopy.poll());
-        }
-
-        Collections.reverse(top10);
-        return top10;
+    public Top10Output getResult(Top10Accumulator acc) {
+        return Top10Output.getTop10Output(acc);
     }
 
     @Override
-    public PriorityQueue<Q2Output> merge(PriorityQueue<Q2Output> queue1, PriorityQueue<Q2Output> queue2) {
+    public Top10Accumulator merge(Top10Accumulator acc1, Top10Accumulator acc2) {
 
-        for (Q2Output output : queue2) {
-            this.add(output, queue1);
-        }
+        acc1.merge(acc2);
 
-        return queue1;
+
+
+        return acc1;
     }
 }

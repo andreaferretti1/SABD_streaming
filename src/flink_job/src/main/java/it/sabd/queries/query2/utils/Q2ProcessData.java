@@ -19,6 +19,7 @@ public class Q2ProcessData extends ProcessWindowFunction<Q2Result, Q2Output, Int
             long startWindow = context.window().getStart();
 
             Q2Output output = new Q2Output(
+                    result.minIngestionTime,
                     startWindow,
                     originAirport,
                     result.notCancDivFlights,

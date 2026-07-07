@@ -45,15 +45,21 @@ services:
       - kafka
     ports:
       - "8081:8081"
-    command: jobmanager
-    networks:
-      - sabd_network
+    command: standalone-job --job-classname it.sabd.Main
     environment:
       - |
         FLINK_PROPERTIES=
         jobmanager.rpc.address: jobmanager
-        parallelism.default: 2   
-
+        parallelism.default: 4
+        metrics.reporter.influxdb.class: org.apache.flink.metrics.influxdb.InfluxdbReporter
+        metrics.reporter.influxdb.host: influxdb
+        metrics.reporter.influxdb.port: 8086
+        metrics.reporter.influxdb.db: flink_metrics
+        metrics.reporter.influxdb.username: results
+        metrics.reporter.influxdb.password: ${INFLUX_TOKEN}
+        metrics.reporter.influxdb.interval: 10 SECONDS
+    networks:
+      - sabd_network
 
 
   flink-task_manager:
@@ -68,6 +74,14 @@ services:
       - |
         FLINK_PROPERTIES=
         jobmanager.rpc.address: jobmanager
+        taskmanager.numberOfTaskSlots: 4
+        metrics.reporter.influxdb.class: org.apache.flink.metrics.influxdb.InfluxdbReporter
+        metrics.reporter.influxdb.host: influxdb
+        metrics.reporter.influxdb.port: 8086
+        metrics.reporter.influxdb.db: flink_metrics
+        metrics.reporter.influxdb.username: results
+        metrics.reporter.influxdb.password: ${INFLUX_TOKEN}
+        metrics.reporter.influxdb.interval: 10 SECONDS
         taskmanager.numberOfTaskSlots: 4
         parallelism.default: 4
     networks:

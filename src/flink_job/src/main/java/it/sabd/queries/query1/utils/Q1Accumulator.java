@@ -4,6 +4,7 @@ import it.sabd.FlightEvent;
 
 public class Q1Accumulator{
 
+    public long ingestionTime = Long.MAX_VALUE;
     public int totalFlights = 0;
     public int completed = 0;
     public int cancelled = 0;
@@ -18,6 +19,7 @@ public class Q1Accumulator{
 
     public void addFlight(FlightEvent event){
 
+        this.ingestionTime = Math.min(this.ingestionTime, event.ingestionTime);
         this.totalFlights++;
 
         boolean isCancelled = event.CANCELLED == 1.0;
@@ -48,6 +50,7 @@ public class Q1Accumulator{
 
     public void mergeAcc(Q1Accumulator acc){
 
+        this.ingestionTime = Math.min(this.ingestionTime, acc.ingestionTime);
         this.totalFlights = this.totalFlights + acc.totalFlights;
         this.completed = this.completed + acc.completed;
         this.cancelled = this.cancelled + acc.cancelled;

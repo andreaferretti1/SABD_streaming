@@ -37,6 +37,7 @@ public class Query2 {
                 .filter(airport -> airport.notCancDivFlights >= 30)
                 .windowAll(TumblingEventTimeWindows.of(Duration.ofHours(1)))
                 .aggregate(new AggregateTop10())
+                .process(new GaugeFunction("query2_1h"))
                 .sinkTo(kafkaSink1H)
                 .setParallelism(4);
 
@@ -53,6 +54,7 @@ public class Query2 {
                 .filter(airport -> airport.notCancDivFlights >= 30)
                 .windowAll(TumblingEventTimeWindows.of(Duration.ofHours(6)))
                 .aggregate(new AggregateTop10())
+                .process(new GaugeFunction("query2_6h"))
                 .sinkTo(kafkaSink6H)
                 .setParallelism(4);
 
@@ -71,6 +73,7 @@ public class Query2 {
                 .windowAll(GlobalWindows.create())
                 .trigger(new EOSTrigger())
                 .aggregate(new AggregateTop10())
+                .process(new GaugeFunction("query2_global"))
                 .sinkTo(kafkaSinkGlobal)
                 .setParallelism(4);
 

@@ -13,7 +13,7 @@ def init_influxdb():
     influx_client = InfluxDBClient(url=url, token=token, org=org)
 
     # Creo i bucket
-    buckets_to_create = ["q1_results", "q2_results"]
+    buckets_to_create = ["q1_results", "q2_results", "flink_metrics"]
     buckets_api = influx_client.buckets_api()
 
     for bucket in buckets_to_create:
