@@ -18,7 +18,7 @@ public class Query1 {
 
         KafkaSink<Q1ResultWithTime> kafkaSink = KafkaSink.<Q1ResultWithTime>builder()
                         .setBootstrapServers("kafka:9092")
-                        .setRecordSerializer(new Q1JsonSerializationSchema("q1_results"))
+                        .setRecordSerializer(new Q1JsonSerializationSchema("q1-results"))
                         .setDeliveryGuarantee(DeliveryGuarantee.AT_LEAST_ONCE)
                         .build();
 

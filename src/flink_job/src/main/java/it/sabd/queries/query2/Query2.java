@@ -27,7 +27,7 @@ public class Query2 {
         //Calcolo statistiche finestra di 1 ora
         KafkaSink<List<Q2Output>> kafkaSink1H = KafkaSink.<List<Q2Output>>builder()
                 .setBootstrapServers("kafka:9092")
-                .setRecordSerializer(new Q2JsonSerializationSchema("q2_results_1h"))
+                .setRecordSerializer(new Q2JsonSerializationSchema("q2-results-1h"))
                 .setDeliveryGuarantee(DeliveryGuarantee.AT_LEAST_ONCE)
                 .build();
 
@@ -38,13 +38,13 @@ public class Query2 {
                 .windowAll(TumblingEventTimeWindows.of(Duration.ofHours(1)))
                 .aggregate(new AggregateTop10())
                 .sinkTo(kafkaSink1H)
-                .setParallelism(1);
+                .setParallelism(4);
 
 
         //Calcolo statistiche finestra di 6 ore
         KafkaSink<List<Q2Output>> kafkaSink6H = KafkaSink.<List<Q2Output>>builder()
                 .setBootstrapServers("kafka:9092")
-                .setRecordSerializer(new Q2JsonSerializationSchema("q2_results_6h"))
+                .setRecordSerializer(new Q2JsonSerializationSchema("q2-results-6h"))
                 .setDeliveryGuarantee(DeliveryGuarantee.AT_LEAST_ONCE)
                 .build();
 
@@ -54,13 +54,13 @@ public class Query2 {
                 .windowAll(TumblingEventTimeWindows.of(Duration.ofHours(6)))
                 .aggregate(new AggregateTop10())
                 .sinkTo(kafkaSink6H)
-                .setParallelism(1);
+                .setParallelism(4);
 
 
         //Calcolo statistiche finestra globale
         KafkaSink<List<Q2Output>> kafkaSinkGlobal = KafkaSink.<List<Q2Output>>builder()
                 .setBootstrapServers("kafka:9092")
-                .setRecordSerializer(new Q2JsonSerializationSchema("q2_results_global"))
+                .setRecordSerializer(new Q2JsonSerializationSchema("q2-results-global"))
                 .setDeliveryGuarantee(DeliveryGuarantee.AT_LEAST_ONCE)
                 .build();
 
@@ -72,7 +72,7 @@ public class Query2 {
                 .trigger(new EOSTrigger())
                 .aggregate(new AggregateTop10())
                 .sinkTo(kafkaSinkGlobal)
-                .setParallelism(1);
+                .setParallelism(4);
 
 
     }
