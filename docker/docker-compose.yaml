@@ -5,7 +5,7 @@ services:
       dockerfile: docker/stream_engine/Dockerfile
     container_name: stream_engine
     environment:
-      - STREAM_DURATION=5
+      - STREAM_DURATION=1
     depends_on:
       - kafka
       - flink-job_manager

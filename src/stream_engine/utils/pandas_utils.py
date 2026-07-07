@@ -33,7 +33,7 @@ def compute_event_time(data):
         'minute': minutes
     }, errors = 'coerce', utc = True)
 
-    return date.astype("datetime64[s, UTC]").astype("int64")
+    return date.astype("int64") // 10**6
 
 
 # Questa funzione calcola il fattore di speedup. La funzione riceve in input la durata totale dello stream, in minuti,

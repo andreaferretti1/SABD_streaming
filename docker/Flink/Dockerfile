@@ -10,6 +10,6 @@ RUN mvn package -DskipTests
 FROM flink:1.20.4-java17
 
 RUN mkdir -p /opt/flink/plugins/influxdb && \
-    cp /opt/flink/opt/flink-metrics-influxdb-*.jar /opt/flink/plugins/influxdb/
+    wget -P /opt/flink/plugins/influxdb/ https://repo1.maven.org/maven2/org/apache/flink/flink-metrics-influxdb/1.20.4/flink-metrics-influxdb-1.20.4.jar
 
 COPY --from=builder /app/target/flink_job-1.jar /opt/flink/usrlib/
