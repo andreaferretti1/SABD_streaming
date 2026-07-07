@@ -1,5 +1,5 @@
 Per poter eseguire l'applicazione è necessario aprire il file docker/.env.template e popolare gli appositi campi con le credenziali necessarie per il set up di InfluxDB. Eventuali spazi, posti all'inizio e alla fine dei valori immessi saranno considerate da InfluxDB come parte delle credenziali.
 Nel file docker/docker-compose.yaml è possibile impostare la durata dello stream: andare nel servizio stream_engine (il primo della lista) e impostare la variabile di ambiente STREAM_DURATION: il valore di tale variabile è espresso in minuti, e di default è impostata a 5.
-Eseguire lo script deploy.sh posizionandosi nella directory root SABD_flights_stream.
+Eseguire lo script deploy.sh posizionandosi nella directory root SABD_flights_stream. Lo script riceve in input due argomenti: il grado di parallelismo e un run_id per le raccogliere le metriche in InfluxDB.
 È possibile visualizzare i grafici tramite la Web UI Grafana all'url http://localhost:3000, inserendo user=admin e password=admin.
 Eseguire lo script teardown.sh posizionandosi nella directory root SABD_flights_stream per eliminare i container.

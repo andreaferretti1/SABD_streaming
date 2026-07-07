@@ -18,10 +18,14 @@ public class GaugeFunction extends ProcessFunction<Top10Output, List<Q2Output>> 
     @Override
     public void open(OpenContext openContext) throws Exception {
         super.open(openContext);
+        String runId = System.getenv("RUN_ID") != null ? System.getenv("RUN_ID") : "0";
+        String parallelism = System.getenv("FLINK_PARALLELISM") != null ? System.getenv("FLINK_PARALLELISM") : "1";
 
         getRuntimeContext()
                 .getMetricGroup()
                 .addGroup("query_id", this.queryId)
+                .addGroup("run_id", runId)
+                .addGroup("parallelism", parallelism)
                 .gauge("endToEndLatency", () -> this.latestLatency);
     }
 

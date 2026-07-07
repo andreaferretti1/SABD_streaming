@@ -1,5 +1,8 @@
 #!/bin/bash
 
+export FLINK_PARALLELISM=$1
+export RUN_ID=$2
+
 COMPOSE_FILE="docker/docker-compose.yaml"
 
 echo "Inizio deployment"
@@ -19,6 +22,7 @@ fi
 # Copio il contenuto di .env.template in .env
 echo "Configuro variabili di ambiente per InfluxDB"
 cat docker/.env.template > docker/.env
+source docker/.env
 echo "Variabili configurate"
 
 # Avvio broker Kafka
@@ -71,7 +75,32 @@ docker exec kafka /opt/kafka/bin/kafka-topics.sh \
 
 echo "Topic creati"
 
-# Avvio i servizi rimanenti
+echo "Avvio InfluxDB"
+docker compose -f $COMPOSE_FILE up -d influxdb
+sleep 10
+
+# Creo bucket flink_metrics e DBRP mapping
+echo "Creo bucket flink_metrics e DBRP mapping"
+docker exec influxdb influx bucket create \
+    --name flink_metrics \
+    --org results \
+    --token ${INFLUX_TOKEN}
+
+BUCKET_ID=$(docker exec influxdb influx bucket list \
+    --name flink_metrics \
+    --org results \
+    --token ${INFLUX_TOKEN} \
+    --json | python3 -c "import sys,json; print(json.load(sys.stdin)[0]['id'])")
+
+docker exec influxdb influx v1 dbrp create \
+    --db flink_metrics \
+    --rp autogen \
+    --bucket-id ${BUCKET_ID} \
+    --org results \
+    --token ${INFLUX_TOKEN} \
+    --default
+
+
 echo "Avvio i servizi rimanenti"
 docker compose -f $COMPOSE_FILE up -d
 

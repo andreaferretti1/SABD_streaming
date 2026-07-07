@@ -47,10 +47,12 @@ services:
       - "8081:8081"
     command: standalone-job --job-classname it.sabd.Main
     environment:
+      - RUN_ID=${RUN_ID}
+      - FLINK_PARALLELISM=${FLINK_PARALLELISM}
       - |
         FLINK_PROPERTIES=
         jobmanager.rpc.address: jobmanager
-        parallelism.default: 4
+        parallelism.default: ${FLINK_PARALLELISM}
         metrics.reporter.influxdb.factory.class: org.apache.flink.metrics.influxdb.InfluxdbReporterFactory
         metrics.reporter.influxdb.host: influxdb
         metrics.reporter.influxdb.port: 8086
@@ -71,6 +73,8 @@ services:
       - flink-job_manager
     command: taskmanager
     environment:
+      - RUN_ID=${RUN_ID}
+      - FLINK_PARALLELISM=${FLINK_PARALLELISM}
       - |
         FLINK_PROPERTIES=
         jobmanager.rpc.address: jobmanager
@@ -82,8 +86,7 @@ services:
         metrics.reporter.influxdb.username: results
         metrics.reporter.influxdb.password: ${INFLUX_TOKEN}
         metrics.reporter.influxdb.interval: 10 SECONDS
-        taskmanager.numberOfTaskSlots: 4
-        parallelism.default: 4
+        parallelism.default: ${FLINK_PARALLELISM}
     networks:
       - sabd_network
 
