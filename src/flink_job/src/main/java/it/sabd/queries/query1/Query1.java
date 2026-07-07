@@ -28,9 +28,7 @@ public class Query1 {
                 .window(TumblingEventTimeWindows.of(Duration.ofHours(1)))
                 .aggregate(new Q1AggregateData(), new Q1ProcessData())
                 .process(new GaugeFunction())
-                .sinkTo(kafkaSink)
-                .setParallelism(4);
-
+                .sinkTo(kafkaSink);
     }
 
 

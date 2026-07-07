@@ -10,7 +10,6 @@ import org.apache.flink.streaming.api.windowing.assigners.GlobalWindows;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 
 
-
 import java.time.Duration;
 import java.util.List;
 
@@ -74,9 +73,7 @@ public class Query2 {
                 .trigger(new EOSTrigger())
                 .aggregate(new AggregateTop10())
                 .process(new GaugeFunction("query2_global"))
-                .sinkTo(kafkaSinkGlobal)
-                .setParallelism(4);
-
+                .sinkTo(kafkaSinkGlobal);
 
     }
 
